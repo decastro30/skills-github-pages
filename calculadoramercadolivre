@@ -1,0 +1,670 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Mercado Livre</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0d2e 0%, #16213e 50%, #0f1419 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1e1e2e;
+            border: 1px solid #3b3b54;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.15);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        
+        .form-section {
+            padding: 40px;
+            background: #252540;
+        }
+        
+        .results-section {
+            padding: 40px;
+            background: #1e1e2e;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #e2e8f0;
+            font-weight: 600;
+            border-bottom: 3px solid #8b5cf6;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #3b3b54;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #2d2d44;
+            color: #e2e8f0;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+        
+        .form-group input::placeholder {
+            color: #64748b;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7e22ce 100%);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.4);
+        }
+        
+        .result-card {
+            background: #2d2d44;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #8b5cf6;
+            border: 1px solid #3b3b54;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #3b3b54;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #a855f7;
+        }
+        
+        .result-label {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        .positive {
+            color: #22c55e;
+        }
+        
+        .negative {
+            color: #ef4444;
+        }
+        
+        .saved-calculations {
+            margin-top: 30px;
+        }
+        
+        .saved-item {
+            background: #2d2d44;
+            border: 1px solid #3b3b54;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .saved-item-info {
+            flex-grow: 1;
+        }
+        
+        .saved-item-name {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+        
+        .saved-item-details {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        .saved-item-profit {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-left: 15px;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-section,
+            .results-section {
+                padding: 20px;
+            }
+        }
+        
+        .warning {
+            background: #451a03;
+            color: #fbbf24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #f59e0b;
+        }
+        
+        .info {
+            background: #1e3a8a;
+            color: #93c5fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Calculadora Mercado Livre</h1>
+            <p>Calcule seus custos, lucros e preços de venda com precisão</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title">📊 Dados do Produto</h2>
+                
+                <div class="form-group">
+                    <label for="nomeProduto">Nome do Produto</label>
+                    <input type="text" id="nomeProduto" placeholder="Ex: Smartphone Samsung Galaxy">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sku">SKU</label>
+                    <input type="text" id="sku" placeholder="Ex: SAMGAL001">
+                </div>
+                
+                <div class="form-group">
+                    <label for="precoCusto">Preço de Custo (R$)</label>
+                    <input type="number" id="precoCusto" step="0.01" placeholder="0.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="imposto">Imposto (%)</label>
+                    <input type="number" id="imposto" step="0.01" placeholder="0.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="margemLucro">Margem de Lucro (%)</label>
+                    <input type="number" id="margemLucro" step="0.01" placeholder="30.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipoAnuncio">Tipo de Anúncio</label>
+                    <select id="tipoAnuncio">
+                        <option value="classico">Clássico (10-14% + custo fixo variável)</option>
+                        <option value="premium">Premium (15-19% + custo fixo variável)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="porcentagemCategoria">Porcentagem da Categoria (%)</label>
+                    <input type="number" id="porcentagemCategoria" step="0.01" placeholder="12.00" min="10" max="19">
+                </div>
+                
+                <div class="form-group">
+                    <label for="peso">Peso do Produto (kg)</label>
+                    <select id="peso">
+                        <option value="0.3">Até 300g - R$ 39,90</option>
+                        <option value="0.5">300g a 500g - R$ 42,90</option>
+                        <option value="1">500g a 1kg - R$ 44,90</option>
+                        <option value="2">1kg a 2kg - R$ 46,90</option>
+                        <option value="3">2kg a 3kg - R$ 49,90</option>
+                        <option value="4">3kg a 4kg - R$ 53,90</option>
+                        <option value="5">4kg a 5kg - R$ 56,90</option>
+                        <option value="9">5kg a 9kg - R$ 88,90</option>
+                        <option value="13">9kg a 13kg - R$ 131,90</option>
+                        <option value="17">13kg a 17kg - R$ 146,90</option>
+                        <option value="23">17kg a 23kg - R$ 171,90</option>
+                        <option value="30">23kg a 30kg - R$ 197,90</option>
+                        <option value="40">30kg a 40kg - R$ 218,90</option>
+                        <option value="50">40kg a 50kg - R$ 233,90</option>
+                        <option value="60">50kg a 60kg - R$ 249,90</option>
+                        <option value="70">60kg a 70kg - R$ 282,90</option>
+                        <option value="80">70kg a 80kg - R$ 313,90</option>
+                        <option value="90">80kg a 90kg - R$ 349,90</option>
+                        <option value="100">90kg a 100kg - R$ 399,90</option>
+                        <option value="125">100kg a 125kg - R$ 446,90</option>
+                        <option value="150">125kg a 150kg - R$ 474,90</option>
+                        <option value="999">Maior que 150kg - R$ 498,90</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="calcular()">🧮 Calcular</button>
+                <button class="btn btn-secondary" onclick="salvarCalculo()">💾 Salvar Cálculo</button>
+                <button class="btn" onclick="exportarPlanilha()">📊 Exportar Planilha</button>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title">💰 Resultados</h2>
+                
+                <div id="resultados">
+                    <div class="info">
+                        Preencha os dados do produto para ver os resultados do cálculo.
+                    </div>
+                </div>
+                
+                <div class="saved-calculations">
+                    <h3 class="section-title">📋 Cálculos Salvos</h3>
+                    <div id="calculosSalvos">
+                        <div class="info">
+                            Nenhum cálculo salvo ainda.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Armazenar dados em memória (não usar localStorage no Claude.ai)
+        let calculosSalvos = [];
+        
+        // Tabela de fretes por peso
+        const tabelaFrete = {
+            0.3: 39.90,
+            0.5: 42.90,
+            1: 44.90,
+            2: 46.90,
+            3: 49.90,
+            4: 53.90,
+            5: 56.90,
+            9: 88.90,
+            13: 131.90,
+            17: 146.90,
+            23: 171.90,
+            30: 197.90,
+            40: 218.90,
+            50: 233.90,
+            60: 249.90,
+            70: 282.90,
+            80: 313.90,
+            90: 349.90,
+            100: 399.90,
+            125: 446.90,
+            150: 474.90,
+            999: 498.90
+        };
+        
+        function getCustoFixo(precoFinal) {
+            // Sem custo fixo para produtos abaixo de R$ 12,50 ou acima de R$ 79,90
+            if (precoFinal >= 79.90 || precoFinal < 12.50) {
+                return 0;
+            }
+            
+            // Faixas de custo fixo
+            if (precoFinal >= 12.50 && precoFinal < 29) {
+                return 6.25;
+            }
+            
+            if (precoFinal >= 29 && precoFinal < 50) {
+                return 6.50;
+            }
+            
+            if (precoFinal >= 50 && precoFinal < 79.90) {
+                return 6.75;
+            }
+            
+            return 0;
+        }
+        
+        function getFrete(peso) {
+            const pesoNum = parseFloat(peso);
+            for (let [limite, valor] of Object.entries(tabelaFrete)) {
+                if (pesoNum <= parseFloat(limite)) {
+                    return valor;
+                }
+            }
+            return tabelaFrete[999];
+        }
+        
+        function calcular() {
+            try {
+                // Capturar dados do formulário
+                const nomeProduto = document.getElementById('nomeProduto').value || 'Produto';
+                const sku = document.getElementById('sku').value || '';
+                const precoCusto = parseFloat(document.getElementById('precoCusto').value) || 0;
+                const imposto = parseFloat(document.getElementById('imposto').value) || 0;
+                const margemLucro = parseFloat(document.getElementById('margemLucro').value) || 0;
+                const tipoAnuncio = document.getElementById('tipoAnuncio').value;
+                const porcentagemCategoria = parseFloat(document.getElementById('porcentagemCategoria').value) || 12;
+                const peso = parseFloat(document.getElementById('peso').value) || 0.3;
+                
+                // Validações básicas
+                if (precoCusto <= 0) {
+                    alert('Por favor, preencha o preço de custo válido.');
+                    return;
+                }
+                
+                if (porcentagemCategoria <= 0 || porcentagemCategoria > 20) {
+                    alert('Por favor, preencha uma porcentagem de categoria válida.');
+                    return;
+                }
+                
+                // Cálculos iniciais
+                const custoImposto = precoCusto * (imposto / 100);
+                const custoTotalProduto = precoCusto + custoImposto;
+                
+                // Valor do frete
+                const valorFrete = getFrete(peso);
+                
+                // Taxa de comissão do ML
+                const taxaComissao = porcentagemCategoria / 100;
+                
+                // Margem desejada
+                const margemDesejada = margemLucro / 100;
+                
+                // Cálculo iterativo para encontrar o preço ideal
+                let precoVenda = custoTotalProduto * 1.5; // Estimativa inicial
+                let iteracoes = 0;
+                const maxIteracoes = 20;
+                
+                while (iteracoes < maxIteracoes) {
+                    // Determinar se o frete é grátis (acima de R$ 79,90)
+                    const freteGratis = precoVenda >= 79.90;
+                    
+                    // Calcular custos baseados no preço atual
+                    const comissaoML = precoVenda * taxaComissao;
+                    const custoFixo = getCustoFixo(precoVenda);
+                    const custoFrete = freteGratis ? valorFrete * 0.5 : 0; // ML paga 50% se frete grátis
+                    
+                    // Custo total
+                    const custoTotal = custoTotalProduto + comissaoML + custoFixo + custoFrete;
+                    
+                    // Lucro atual
+                    const lucroAtual = precoVenda - custoTotal;
+                    const margemAtual = lucroAtual / precoVenda;
+                    
+                    // Verificar se atingiu a margem desejada (com tolerância de 0.1%)
+                    if (Math.abs(margemAtual - margemDesejada) < 0.001) {
+                        break;
+                    }
+                    
+                    // Ajustar preço para atingir a margem desejada
+                    // Preço = Custos / (1 - margem_desejada)
+                    const novoPreco = custoTotal / (1 - margemDesejada);
+                    
+                    // Verificar convergência
+                    if (Math.abs(novoPreco - precoVenda) < 0.01) {
+                        precoVenda = novoPreco;
+                        break;
+                    }
+                    
+                    precoVenda = novoPreco;
+                    iteracoes++;
+                }
+                
+                // Cálculos finais com o preço encontrado
+                const freteGratis = precoVenda >= 79.90;
+                const comissaoMLFinal = precoVenda * taxaComissao;
+                const custoFixoFinal = getCustoFixo(precoVenda);
+                const custoFreteFinal = freteGratis ? valorFrete * 0.5 : 0;
+                
+                const custoTotalFinal = custoTotalProduto + comissaoMLFinal + custoFixoFinal + custoFreteFinal;
+                const lucroFinal = precoVenda - custoTotalFinal;
+                const margemFinalPorcentagem = (lucroFinal / precoVenda) * 100;
+                
+                // Exibir resultados
+                const resultadosDiv = document.getElementById('resultados');
+                resultadosDiv.innerHTML = `
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="result-label">💰 Preço de Venda Sugerido:</span>
+                            <span class="result-value">R$ ${precoVenda.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">📦 Custo do Produto:</span>
+                            <span class="result-value">R$ ${precoCusto.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">🏛️ Impostos (${imposto}%):</span>
+                            <span class="result-value">R$ ${custoImposto.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">🛒 Comissão ML (${porcentagemCategoria}%):</span>
+                            <span class="result-value">R$ ${comissaoMLFinal.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">🔧 Custo Fixo:</span>
+                            <span class="result-value">R$ ${custoFixoFinal.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">🚚 Frete (${peso}kg):</span>
+                            <span class="result-value">${freteGratis ? 'R$ ' + valorFrete.toFixed(2) + ' (50% ML = R$ ' + custoFreteFinal.toFixed(2) + ')' : 'R$ ' + valorFrete.toFixed(2) + ' (comprador paga)'}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">💸 Custo Total:</span>
+                            <span class="result-value">R$ ${custoTotalFinal.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">✨ Lucro Líquido:</span>
+                            <span class="result-value ${lucroFinal >= 0 ? 'positive' : 'negative'}">R$ ${lucroFinal.toFixed(2)} (${margemFinalPorcentagem.toFixed(1)}%)</span>
+                        </div>
+                    </div>
+                    
+                    ${!freteGratis ? '<div class="warning">⚠️ Produto abaixo de R$ 79,90 - Frete será cobrado do comprador</div>' : ''}
+                    ${freteGratis ? '<div class="info">ℹ️ Produto acima de R$ 79,90 - Frete grátis (ML paga 50%)</div>' : ''}
+                    ${custoFixoFinal === 0 && precoVenda >= 79.90 ? '<div class="info">ℹ️ Sem custo fixo - produto acima de R$ 79,90</div>' : ''}
+                    ${custoFixoFinal === 0 && precoVenda < 12.50 ? '<div class="info">ℹ️ Sem custo fixo - produto abaixo de R$ 12,50</div>' : ''}
+                    ${lucroFinal < 0 ? '<div class="warning">⚠️ Atenção: O produto está com margem negativa!</div>' : ''}
+                    ${iteracoes >= maxIteracoes ? '<div class="warning">⚠️ Cálculo pode não ter convergido totalmente</div>' : ''}
+                `;
+                
+                // Armazenar último cálculo para salvar
+                window.ultimoCalculo = {
+                    nomeProduto,
+                    sku,
+                    precoCusto,
+                    imposto,
+                    margemLucro,
+                    tipoAnuncio,
+                    porcentagemCategoria,
+                    peso,
+                    precoVenda,
+                    lucroFinal,
+                    margemFinalPorcentagem,
+                    custoTotalFinal,
+                    freteGratis,
+                    valorFrete,
+                    custoFreteFinal,
+                    custoFixoFinal,
+                    comissaoMLFinal,
+                    timestamp: new Date().toISOString()
+                };
+                
+            } catch (error) {
+                console.error('Erro no cálculo:', error);
+                alert('Erro no cálculo. Verifique os valores inseridos.');
+            }
+        }
+        
+        function salvarCalculo() {
+            if (!window.ultimoCalculo) {
+                alert('Faça um cálculo primeiro!');
+                return;
+            }
+            
+            calculosSalvos.push({ ...window.ultimoCalculo });
+            atualizarCalculosSalvos();
+            alert('Cálculo salvo com sucesso!');
+        }
+        
+        function atualizarCalculosSalvos() {
+            const div = document.getElementById('calculosSalvos');
+            
+            if (calculosSalvos.length === 0) {
+                div.innerHTML = '<div class="info">Nenhum cálculo salvo ainda.</div>';
+                return;
+            }
+            
+            div.innerHTML = calculosSalvos.map((calculo, index) => `
+                <div class="saved-item">
+                    <div class="saved-item-info">
+                        <div class="saved-item-name">${calculo.nomeProduto}</div>
+                        <div class="saved-item-details">
+                            SKU: ${calculo.sku} | Custo: R$ ${calculo.precoCusto.toFixed(2)} | 
+                            ${calculo.tipoAnuncio} | ${calculo.peso}kg
+                        </div>
+                    </div>
+                    <div class="saved-item-profit ${calculo.lucroFinal >= 0 ? 'positive' : 'negative'}">
+                        R$ ${calculo.precoVenda.toFixed(2)}
+                        <br>
+                        <small>Lucro: R$ ${calculo.lucroFinal.toFixed(2)}</small>
+                    </div>
+                    <button class="btn btn-small" onclick="removerCalculo(${index})">🗑️</button>
+                </div>
+            `).join('');
+        }
+        
+        function removerCalculo(index) {
+            if (confirm('Deseja remover este cálculo?')) {
+                calculosSalvos.splice(index, 1);
+                atualizarCalculosSalvos();
+            }
+        }
+        
+        function exportarPlanilha() {
+            if (calculosSalvos.length === 0) {
+                alert('Não há cálculos salvos para exportar!');
+                return;
+            }
+            
+            let csv = 'Nome do Produto,SKU,Preço de Custo,Imposto (%),Margem Lucro (%),Tipo Anúncio,% Categoria,Peso (kg),Preço Final,Lucro Real,Margem Real (%),Custo Total,Frete Grátis,Valor Frete Total,Custo Frete,Custo Fixo,Comissão ML,Data\n';
+            
+            calculosSalvos.forEach(calculo => {
+                csv += `"${calculo.nomeProduto}","${calculo.sku}",${calculo.precoCusto},${calculo.imposto},${calculo.margemLucro},"${calculo.tipoAnuncio}",${calculo.porcentagemCategoria},${calculo.peso},${calculo.precoVenda.toFixed(2)},${calculo.lucroFinal.toFixed(2)},${calculo.margemFinalPorcentagem.toFixed(2)},${calculo.custoTotalFinal.toFixed(2)},${calculo.freteGratis ? 'Sim' : 'Não'},${calculo.valorFrete.toFixed(2)},${calculo.custoFreteFinal.toFixed(2)},${calculo.custoFixoFinal.toFixed(2)},${calculo.comissaoMLFinal.toFixed(2)},"${new Date(calculo.timestamp).toLocaleDateString('pt-BR')}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `calculadora_mercado_livre_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Atualizar validação de porcentagem baseada no tipo de anúncio
+        document.getElementById('tipoAnuncio').addEventListener('change', function() {
+            const input = document.getElementById('porcentagemCategoria');
+            if (this.value === 'classico') {
+                input.setAttribute('min', '10');
+                input.setAttribute('max', '14');
+                input.setAttribute('placeholder', '12.00 (10-14%)');
+            } else {
+                input.setAttribute('min', '15');
+                input.setAttribute('max', '19');
+                input.setAttribute('placeholder', '17.00 (15-19%)');
+            }
+        });
+        
+        // Carregar cálculos salvos ao inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            atualizarCalculosSalvos();
+        });
+    </script>
+</body>
+</html>
